@@ -132,15 +132,18 @@ module Sinatra
       super(*keys)
     end
 
-    def merge!(other_hash)
-      return super if other_hash.is_a?(self.class)
-
-      other_hash.each_pair do |key, value|
-        key = convert_key(key)
-        value = yield(key, self[key], value) if block_given? && key?(key)
-        self[key] = convert_value(value)
+    def merge!(*other_hashes)
+      other_hashes.each do |other_hash|
+        if other_hash.is_a?(self.class)
+          super(other_hash)
+        else
+          other_hash.each_pair do |key, value|
+            key = convert_key(key)
+            value = yield(key, self[key], value) if block_given? && key?(key)
+            self[key] = convert_value(value)
+          end
+        end
       end
-
       self
     end
 

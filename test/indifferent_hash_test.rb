@@ -66,6 +66,12 @@ class TestIndifferentHashBasics < Minitest::Test
 
     assert_equal({ ?a=>'a*a*A', ?b=>'b*b*B', 3=>3, ?d=>'D' }, hash)
   end
+
+  def test_multiple_argument_merge!
+    hash = Sinatra::IndifferentHash[:a=>'a']
+    hash.merge!({:b=>'b'}, Sinatra::IndifferentHash[:c=>'c'])
+    assert_equal({?a=>'a', ?b=>'b', ?c=>'c'}, hash)
+  end
 end
 
 class TestIndifferentHash < Minitest::Test
